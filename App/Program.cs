@@ -46,12 +46,22 @@ using static App.Utils.Executor;
 /* --- SETTING UP USER --- */
 Console.Write("Write username: ".Pastel(Color.Gold));
 var username = Console.ReadLine();
-
 if (username is null) return;
 
-Console.WriteLine($"Creating user: \"{username}\"...".Pastel(Color.Teal));
-await Execute(new[] {"useradd", username});
+// await Execute(new[] {"useradd", username});
 
+Console.Write("Write temporary password: ".Pastel(Color.Gold));
+var pw = Console.ReadLine();
+if (pw is null) return;
+
+Console.WriteLine($"Creating user: \"{username}\"...".Pastel(Color.Teal));
+
+
+var passwdCmd = $"{pw}\n{pw}\n\n\n\n\nY" | Cli.Wrap("adduser")
+    .WithArguments(username);
+var result = await passwdCmd.ExecuteBufferedAsync();
+
+Console.WriteLine(result.StandardError, result.StandardOutput);
 Console.WriteLine("Assigning user roles...".Pastel(Color.Teal));
 await Execute(new[] {"usermod", "-aG", "sudo", username});
 
@@ -64,3 +74,15 @@ await Execute(new[] {"ufw", "allow", "OpenSSH"});
 await Execute(new[] {"ufw", "--force", "enable"});
 
 Console.WriteLine("Firewall enabled.".Pastel(Color.Chartreuse));
+
+/* --- SETTING UP SSH KEYS --- */
+// var username = "bobby";
+// var pw = "password123";
+var currentIp = IpGrabber.GrabIp();
+Console.WriteLine(
+    "\nAdd ssh keys remotely by using the ssh-copy-id command from your client machine. You will be prompted to use the temporary password.".Pastel(Color.Gold));
+Console.WriteLine($"\tCommand: ssh-copy-id {username}@{currentIp}".Pastel(Color.Teal));
+Console.WriteLine($"\tUsername: {username}".Pastel(Color.Teal));
+Console.WriteLine($"\tPassword: {pw}".Pastel(Color.Teal));
+Console.WriteLine("Once you're finished, press any key to continue...".Pastel(Color.Gold));
+Console.ReadKey();

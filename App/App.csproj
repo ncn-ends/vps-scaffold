@@ -13,4 +13,9 @@
       <PackageReference Include="Pastel" Version="3.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Program.cs" />
+      <None Include="Program.cs" />
+    </ItemGroup>
+
 </Project>
