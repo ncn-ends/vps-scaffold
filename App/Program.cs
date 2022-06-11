@@ -1,46 +1,9 @@
 ﻿using System.Drawing;
-using System.Security.Cryptography;
-using App;
-using App.Operations;
 using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
-using CliWrap.EventStream;
 using Pastel;
 using static App.Utils.Executor;
-
-// try
-// {
-//
-//     var dockerResults = await Cli.Wrap("git")
-//         .WithArguments("--version")
-//         .ExecuteBufferedAsync();
-//
-//     Console.WriteLine(dockerResults.StandardError == ""
-//         ? dockerResults.StandardOutput
-//         : dockerResults.StandardError);
-// }
-// catch (Exception e)
-// {
-//     Console.WriteLine(e.ToString());
-// }
-
-// .WithWorkingDirectory
-//      -- the directory to execute the command / shell script in
-
-// Cli.Wrap(@"~/scripts/something.sh");
-//      -- execute a shell script file
-
-
-// await WriteAllLines.ExampleAsync();
-
-// var username = UserOperations.RequestUsernameByInput();
-// await UserOperations.CreateUserAndAssignPermissions(username);
-
-// await Execute(new[] {@"./test.sh", "qwe", "asd"});
-//
-// var answer = Console.ReadLine();
-// Console.WriteLine(answer);
 
 
 /* --- SETTING UP USER --- */
@@ -61,28 +24,51 @@ var passwdCmd = $"{pw}\n{pw}\n\n\n\n\nY" | Cli.Wrap("adduser")
     .WithArguments(username);
 var result = await passwdCmd.ExecuteBufferedAsync();
 
-Console.WriteLine(result.StandardError, result.StandardOutput);
+Console.WriteLine(result.StandardOutput);
 Console.WriteLine("Assigning user roles...".Pastel(Color.Teal));
-await Execute(new[] {"usermod", "-aG", "sudo", username});
+await Execute(new[] {"usermod", "-aG", "sudo", username}, silently: true);
 
 Console.WriteLine("User created".Pastel(Color.Chartreuse));
 
 
 /* --- SETTING UP FIREWALL --- */
 Console.WriteLine("Setting up firewall...".Pastel(Color.Teal));
-await Execute(new[] {"ufw", "allow", "OpenSSH"});
-await Execute(new[] {"ufw", "--force", "enable"});
+await Execute(new[] {"ufw", "allow", "OpenSSH"}, silently: true);
+await Execute(new[] {"ufw", "--force", "enable"}, silently: true);
 
 Console.WriteLine("Firewall enabled.".Pastel(Color.Chartreuse));
 
 /* --- SETTING UP SSH KEYS --- */
 // var username = "bobby";
 // var pw = "password123";
-var currentIp = IpGrabber.GrabIp();
+var currentIp = await IpGrabber.GrabIpNoHttp();
 Console.WriteLine(
-    "\nAdd ssh keys remotely by using the ssh-copy-id command from your client machine. You will be prompted to use the temporary password.".Pastel(Color.Gold));
+    "\nAdd ssh keys remotely by using the ssh-copy-id command from your client machine. You will be prompted to use the temporary password."
+        .Pastel(Color.Gold));
 Console.WriteLine($"\tCommand: ssh-copy-id {username}@{currentIp}".Pastel(Color.Teal));
 Console.WriteLine($"\tUsername: {username}".Pastel(Color.Teal));
 Console.WriteLine($"\tPassword: {pw}".Pastel(Color.Teal));
-Console.WriteLine("Once you're finished, press any key to continue...".Pastel(Color.Gold));
-Console.ReadKey();
+Speaker.SayPressAnyKey();
+
+Console.WriteLine("\nNow from your client machine, attempt to login to the remote server using your new user using ssh."
+    .Pastel(Color.Gold));
+Speaker.SayPressAnyKey();
+
+Console.WriteLine("Turning off password authentication.".Pastel(Color.Teal));
+var path = "/etc/ssh/sshd_config";
+var sshdConfig = FileSystem.FetchFileContents(path);
+
+var linesAfterEdit = FileSystem.EditLine(
+    sshdConfig,
+    "PasswordAuthentication yes",
+    "PasswordAuthentication no");
+
+await FileSystem.OverwriteFile(path, linesAfterEdit);
+
+await Execute(new[] {"sudo", "systemctl", "restart", "ssh"});
+
+Console.WriteLine("\nSSH authentication completed and password authentication is disabled.".Pastel(Color.Gold));
+Console.WriteLine("Try to log in again with ssh to confirm it's working.".Pastel(Color.Gold));
+Speaker.SayPressAnyKey();
+
+Console.WriteLine("SSH set up complete".Pastel(Color.Chartreuse));

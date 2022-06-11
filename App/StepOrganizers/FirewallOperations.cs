@@ -1,4 +1,4 @@
-namespace App.Operations;
+namespace App.StepOrganizers;
 
 public class FirewallOperations
 {

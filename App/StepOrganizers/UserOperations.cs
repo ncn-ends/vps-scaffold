@@ -1,8 +1,6 @@
 using App.Utils;
-using CliWrap;
-using CliWrap.Buffered;
 
-namespace App.Operations;
+namespace App.StepOrganizers;
 
 public class UserOperations
 {

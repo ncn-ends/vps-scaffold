@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using CliWrap;
 using CliWrap.EventStream;
 
@@ -5,43 +6,34 @@ namespace App.Utils;
 
 public static class Executor
 {
-    public static async Task Execute(string cmd)
-    {
-        var results = Cli.Wrap(cmd);
 
-        await ProcessOutput(results);
-    }
-
-    public static async Task Execute(string[] cmds)
+    public static async Task Execute(string[] cmds, bool silently = false)
     {
         if (cmds is null) throw new Exception("Bad argument. Commands can't be null.");
-        
+
         var results = Cli.Wrap(cmds[0]).WithArguments(cmds.Skip(1));
-        
-        await ProcessOutput(results);
+
+        await ProcessOutput(results, silently);
     }
 
-    private static async Task ProcessOutput(Command results)
+
+    private static async Task ProcessOutput(Command results, bool silently)
     {
         await foreach (var cmdEvent in results.ListenAsync())
         {
             switch (cmdEvent)
             {
                 case StandardOutputCommandEvent stdOut:
-                    Console.WriteLine($"{stdOut.Text}");
-                    if (stdOut.Text.Contains("Proceed") && stdOut.Text.Contains("?"))
-                    {
-                        var asd = Console.ReadLine();
-                        Thread.Sleep(2000);
-                    }
+                    if (!silently) Console.WriteLine($"{stdOut.Text}");
                     break;
                 case StandardErrorCommandEvent stdErr:
-                    Console.WriteLine($"Error: {stdErr.Text}");
+                    if (!silently) Console.WriteLine($"Error: {stdErr.Text}");
                     break;
                 case ExitedCommandEvent exited:
                     // Console.Write(">>> ");
                     break;
             }
+
             Thread.Sleep(500);
         }
     }

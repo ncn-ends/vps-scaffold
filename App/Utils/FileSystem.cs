@@ -49,8 +49,34 @@ public static class FileSystem
         return filestring;
     }
 
-    public static void EditLineInFile(string pathFromUserDir)
+    public static async Task OverwriteFile(string path, string[] content)
     {
+        await using StreamWriter file = new(path);
+        foreach (string line in content)
+        {
+            await file.WriteLineAsync(line);
+        }
+    }
+
+    public static string[] EditLine(string content, string signifier, string edit)
+    {
+        /* split by lines, platform indepdenent */
+        var lines = content.Split(
+            new[] {"\r\n", "\r", "\n"},
+            StringSplitOptions.None
+        );
+
+        /* loop through each line, setting any PasswordAuthentication to no */
+        for (int i = 0; i < lines.Length; i++)
+        {
+            var line = lines[i];
+            if (line.Contains(signifier))
+            {
+                lines[i] = edit;
+            }
+        }
+
+        return lines;
     }
 
     private static void VerifyFileIsWriteable(FileInfo fi, string filePath)
