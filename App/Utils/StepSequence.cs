@@ -1,7 +1,7 @@
 using App.Static;
-using App.Utils;
+using App.Steps;
 
-namespace App.Steps;
+namespace App.Utils;
 
 public static class StepSequence
 {
@@ -17,6 +17,6 @@ public static class StepSequence
         await FirewallSteps.PerformSshSteps();
         await SSHSteps.PerformAll();
         await NginxSteps.PerformAll();
-        await NodeSteps.PerformAll();
+        // await NodeSteps.PerformAll();
     }
 }

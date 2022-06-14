@@ -8,13 +8,6 @@ using static App.Utils.CLI;
 
 namespace App.Steps;
 
-// CopyFile(Files.SampleIndexHtml, /var/www/{domainName}/html/index.html)
-// CopyFile(Files.ServerBlockSampleIndexHtml, /etc/nginx/sites-available/{domainName}
-// sudo ln -s /etc/nginx/sites-available/{domainName} /etc/nginx/sites-enabled/
-// EditLine(/etc/nginx/nginx.conf, "server_names_hash_bucket_size", "server_names_hash_bucket_size 64;")
-// sudo nginx -t
-// sudo systemctl restart nginx
-
 public static class NginxSteps
 {
     private static async Task InstallNginx()
@@ -34,7 +27,7 @@ public static class NginxSteps
         Speaker.SayPressAnyKey();
     }
 
-    private static async Task SwitchToNewUser()
+    private static async Task SwitchToCreatedUser()
     {
         var password = Data.Password;
         var username = Data.Username;
@@ -43,8 +36,7 @@ public static class NginxSteps
 
     private static async Task SetUpNginxDirectories()
     {
-        var currentIp = Data.CurrentIp;
-        var domainName = currentIp;
+        var domainName = Data.CurrentIp;
         var password = Data.Password;
 
         await (password | Cli.Wrap($"sudo mkdir -p /var/www/{domainName}/html"))
@@ -54,6 +46,32 @@ public static class NginxSteps
             .ExecuteBufferedAsync();
 
         await (password | Cli.Wrap($"sudo chmod -R 755 /var/www/{domainName}"))
+            .ExecuteBufferedAsync();
+
+        await FileSystem.WriteFile(
+            StaticFileText.DefaultHtmlFile(),
+            $"/var/www/{domainName}/html",
+            "index.html"
+        );
+
+        await FileSystem.WriteFile(
+            StaticFileText.NginxServerBlock(domainName),
+            "/etc/nginx/sites-available",
+            domainName
+        );
+
+        await (password | Cli.Wrap($"sudo ln -s /etc/nginx/sites-available/{domainName} /etc/nginx/sites-enabled/"))
+            .ExecuteBufferedAsync();
+    }
+
+    private static async Task VerifyNginx()
+    {
+        var password = Data.Password;
+
+        await (password | Cli.Wrap("sudo nginx -t"))
+            .ExecuteBufferedAsync();
+
+        await (password | Cli.Wrap("sudo systemctl restart nginx"))
             .ExecuteBufferedAsync();
     }
 
@@ -66,9 +84,18 @@ public static class NginxSteps
         ConfirmBasicSetup();
 
         Console.WriteLine("Configuring Nginx server block...".Pastel(Color.Teal));
-        
-        await SwitchToNewUser();
-        await SetUpNginxDirectories();
 
+        await SwitchToCreatedUser();
+        await SetUpNginxDirectories();
+        
+        await FileSystem.EditLine(
+            "/etc/nginx/nginx.conf",
+            "server_names_hash_bucket_size",
+            "\tserver_names_hash_bucket_size 64;"
+        );
+
+        await VerifyNginx();
+
+        Console.WriteLine("Nginx set up complete.".Pastel(Color.Chartreuse));
     }
 }
