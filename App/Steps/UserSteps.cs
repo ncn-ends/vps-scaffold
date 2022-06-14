@@ -1,5 +1,6 @@
 using System.Drawing;
 using CliWrap;
+using CliWrap.Buffered;
 using Pastel;
 using static App.Utils.Executor;
 
@@ -23,7 +24,7 @@ public static class UserSteps
 
     private static string AskForPassword()
     {
-        Console.Write("Write temporary password: ".Pastel(Color.Gold));
+        Console.Write("Write password for user: ".Pastel(Color.Gold));
         var password = Console.ReadLine();
         
         if (password is null)
@@ -35,18 +36,18 @@ public static class UserSteps
         return password;
     }
 
-    private static async Task CreateUser(string username)
+    // private static async Task CreateUser(string username)
+    // {
+    //     Console.WriteLine($"Creating user: \"{username}\"...".Pastel(Color.Teal));
+    //     await Execute(new[] {"useradd", username});
+    // }
+
+    private static async Task CreateUserWithPassword(string username, string password)
     {
         Console.WriteLine($"Creating user: \"{username}\"...".Pastel(Color.Teal));
-        await Execute(new[] {"useradd", username});
-    }
-
-    private static async Task SetTempPassword(string username, string password)
-    {
-        Console.WriteLine("Setting temp password for user...".Pastel(Color.Teal));
         var passwdCmd = $"{password}\n{password}\n\n\n\n\nY" | Cli.Wrap("adduser")
             .WithArguments(username);
-        await passwdCmd.ExecuteAsync();
+        await passwdCmd.ExecuteBufferedAsync();
     }
 
     private static async Task AddUserToSudoRole(string username)
@@ -60,8 +61,7 @@ public static class UserSteps
         var username = AskForUsername();
         var password = AskForPassword();
         
-        await CreateUser(username);
-        await SetTempPassword(username, password);
+        await CreateUserWithPassword(username, password);
         await AddUserToSudoRole(username);
 
         Console.WriteLine("User created".Pastel(Color.Chartreuse));

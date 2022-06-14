@@ -58,15 +58,15 @@ public static class FileSystem
         }
     }
 
-    public static string[] EditLine(string content, string signifier, string edit)
+    public static async Task EditLine(string path, string signifier, string edit)
     {
-        /* split by lines, platform indepdenent */
+        var content = FetchFileContents(path);
+        /* split by lines, platform independent */
         var lines = content.Split(
             new[] {"\r\n", "\r", "\n"},
             StringSplitOptions.None
         );
 
-        /* loop through each line, setting any PasswordAuthentication to no */
         for (int i = 0; i < lines.Length; i++)
         {
             var line = lines[i];
@@ -76,7 +76,7 @@ public static class FileSystem
             }
         }
 
-        return lines;
+        await OverwriteFile(path, lines);
     }
 
     private static void VerifyFileIsWriteable(FileInfo fi, string filePath)

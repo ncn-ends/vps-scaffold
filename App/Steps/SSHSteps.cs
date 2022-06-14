@@ -7,7 +7,7 @@ namespace App.Steps;
 
 public static class SSHSteps
 {
-    public static async Task TellUserSetUpSSHFromClient(string username, string password)
+    private static async Task TellUserSetUpSSHFromClient(string username, string password)
     {
         var currentIp = await IpGrabber.GrabIpNoHttp();
         Console.WriteLine(
@@ -19,42 +19,44 @@ public static class SSHSteps
         Speaker.SayPressAnyKey();
     }
 
-    public static void TellUserTrySSHLogin()
+    private static void TellUserTrySSHLogin()
     {
-        Console.WriteLine("\nNow from your client machine, attempt to login to the remote server using your new user using SSH authentication."
-            .Pastel(Color.Gold));
+        Console.WriteLine(
+            "\nNow from your client machine, attempt to login to the remote server using your new user using SSH authentication."
+                .Pastel(Color.Gold));
         Speaker.SayPressAnyKey();
     }
 
-    public static async Task TurnOffPasswordAuthentication()
+    private static async Task TurnOffPasswordAuthentication()
     {
         Console.WriteLine("Turning off password authentication.".Pastel(Color.Teal));
-        var path = "/etc/ssh/sshd_config";
-        var sshdConfig = FileSystem.FetchFileContents(path);
+        const string path = "/etc/ssh/sshd_config";
+        const string lineBeforeEdit = "PasswordAuthentication yes";
+        const string lineAfterEdit = "PasswordAuthentication no";
 
-        var linesAfterEdit = FileSystem.EditLine(
-            sshdConfig,
-            "PasswordAuthentication yes",
-            "PasswordAuthentication no");
-
-        await FileSystem.OverwriteFile(path, linesAfterEdit);
+        await FileSystem.EditLine(
+            path,
+            lineBeforeEdit,
+            lineAfterEdit);
     }
 
-    public static async Task RestartSshService()
+    private static async Task RestartSshService()
     {
         await Execute(new[] {"sudo", "systemctl", "restart", "ssh"});
     }
 
-    public static void TellUserTrySshLoginAgain()
+    private static void TellUserTrySshLoginAgain()
     {
         Console.WriteLine("\nSSH authentication completed and password authentication is disabled.".Pastel(Color.Gold));
         Console.WriteLine("Try to log in again with ssh to confirm it's working.".Pastel(Color.Gold));
         Speaker.SayPressAnyKey();
     }
-    
-    
+
+
     public static async Task PerformAll(string username, string password)
     {
+        Console.WriteLine("Setting up SSH Authentication...".Pastel(Color.Teal));
+
         await TellUserSetUpSSHFromClient(username, password);
         TellUserTrySSHLogin();
         await TurnOffPasswordAuthentication();

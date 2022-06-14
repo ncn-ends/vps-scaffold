@@ -7,5 +7,6 @@ public static class StepOrganizer
         var (username, password) = await UserSteps.PerformAll();
         await FirewallSteps.PerformAll();
         await SSHSteps.PerformAll(username, password);
+        await NodeSteps.PerformAll(password);
     }
 }

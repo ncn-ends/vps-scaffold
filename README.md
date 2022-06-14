@@ -1,9 +1,23 @@
+## Introduction
+
+
+
 ## Usage
 
 1) Download the release package.
 2) Run the command
 3) Follow the prompts and input them accordingly.
 
-Sources:  
-https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04  
-https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-20-04#step-4-setting-up-a-basic-firewall  
+### Assumptions
+
+- SSL/TLS is not configured
+- The program does not assign a domain to the Nginx configuration and instead uses the public IPv4 address assigned to the server. 
+  - Note: You can just assign a domain to the IP and get it working with http requests, but note that some domains require https when requesting from browsers. See HSTS domains list.
+
+## Plans
+
+- Disable root login
+- Configure "minimal" mode, which doesn't have as many prompts to guide the user.
+- Allow for SSL/TLS configuration
+- Allow for proper domain configuration
+- Allow for other types of deployments, such as ASP.NET, Python, etc.

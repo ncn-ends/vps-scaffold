@@ -6,12 +6,20 @@ namespace App.Utils;
 
 public static class Executor
 {
-
     public static async Task Execute(string[] cmds, bool silently = false)
     {
         if (cmds is null) throw new Exception("Bad argument. Commands can't be null.");
 
         var results = Cli.Wrap(cmds[0]).WithArguments(cmds.Skip(1));
+
+        await ProcessOutput(results, silently);
+    }
+    
+    public static async Task Execute(string cmd, bool silently = false)
+    {
+        if (cmd is null) throw new Exception("Bad argument. Commands can't be null.");
+
+        var results = Cli.Wrap(cmd);
 
         await ProcessOutput(results, silently);
     }
@@ -34,7 +42,10 @@ public static class Executor
                     break;
             }
 
-            Thread.Sleep(500);
+            if (silently)
+            {
+                Thread.Sleep(500);
+            }
         }
     }
 }
