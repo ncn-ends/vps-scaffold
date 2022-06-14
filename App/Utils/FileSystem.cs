@@ -8,6 +8,15 @@ namespace App.Utils;
 
 public static class FileSystem
 {
+    public static string[] CrossPlatformSplit(string content)
+    {
+        var lines = content.Split(
+            new[] {"\r\n", "\r", "\n"},
+            StringSplitOptions.None
+        );
+        return lines;
+    }
+
     /**
      * Reads file contents and parses them into a string, respecting formatting.
      * Expects path to be from user directory
@@ -49,6 +58,12 @@ public static class FileSystem
         return filestring;
     }
 
+    public static async Task OverwriteFile(string path, string content)
+    {
+        var lines = CrossPlatformSplit(content);
+        await OverwriteFile(path, lines);
+    }
+
     public static async Task OverwriteFile(string path, string[] content)
     {
         await using StreamWriter file = new(path);
@@ -61,11 +76,7 @@ public static class FileSystem
     public static async Task EditLine(string path, string signifier, string edit)
     {
         var content = FetchFileContents(path);
-        /* split by lines, platform independent */
-        var lines = content.Split(
-            new[] {"\r\n", "\r", "\n"},
-            StringSplitOptions.None
-        );
+        var lines = CrossPlatformSplit(content);
 
         for (int i = 0; i < lines.Length; i++)
         {
@@ -94,5 +105,37 @@ public static class FileSystem
                 "File is read-only despite attempt to change it. Are you running the program as sudo?".Pastel(
                     Color.Crimson));
         }
+    }
+
+    /*
+     * Example: 
+     *   var content = StaticFileText.DefaultHtmlFile();
+     *   const string path = "somewhere/deeply/nested";
+     *   const string filename = "index.html";
+     *   await FileSystem.WriteFile(content, path, filename);
+     */
+    public static async Task WriteFile(string content, string pathToFile, string fileName)
+    {
+        var lines = CrossPlatformSplit(content);
+        await WriteFile(lines, pathToFile, fileName);
+    }
+
+    /*
+     * Example: 
+     *   var content = StaticFileText.DefaultHtmlFile();
+     *   const string path = "somewhere/deeply/nested";
+     *   const string filename = "index.html";
+     *   await FileSystem.WriteFile(content, path, filename);
+     */
+    public static async Task WriteFile(string[] content, string pathToFile, string fileName)
+    {
+        if (!Directory.Exists(pathToFile))
+        {
+            Directory.CreateDirectory(pathToFile);
+        }
+
+        var fullPath = Path.Combine(pathToFile, fileName);
+
+        await OverwriteFile(fullPath, content);
     }
 }

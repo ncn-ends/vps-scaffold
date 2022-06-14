@@ -4,7 +4,7 @@ using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
 using Pastel;
-using static App.Utils.Executor;
+using static App.Utils.CLI;
 
 namespace App.Steps;
 /* --- setting up nodejs --- */
@@ -54,10 +54,7 @@ public static class NodeSteps
         await Execute("source ~/.bashrc");
         await Execute("nvm install --lts");
 
-        var sudoAptUpdate = password | Cli.Wrap("sudo apt update");
-        await sudoAptUpdate.ExecuteBufferedAsync();
-        var aptInstallBuildEssential = password | Cli.Wrap("sudo apt install build-essential");
-        await aptInstallBuildEssential.ExecuteBufferedAsync();
+        await APT.InstallPackage("build-essential");
         await Execute("npm install pm2@latest -g");
 
         Console.WriteLine("NodeJS set up complete.".Pastel(Color.Chartreuse));

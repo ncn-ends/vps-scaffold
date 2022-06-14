@@ -2,7 +2,7 @@ using System.Drawing;
 using App.Static;
 using App.Utils;
 using Pastel;
-using static App.Utils.Executor;
+using static App.Utils.CLI;
 
 namespace App.Steps;
 

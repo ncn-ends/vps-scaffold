@@ -4,7 +4,7 @@ using CliWrap.EventStream;
 
 namespace App.Utils;
 
-public static class Executor
+public static class CLI
 {
     public static async Task Execute(string[] cmds, bool silently = false)
     {

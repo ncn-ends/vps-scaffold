@@ -1,6 +1,8 @@
-﻿using App.Steps;
+﻿using App.Static;
+using App.Steps;
+using App.Utils;
 
-await StepOrganizer.Begin();
+await StepSequence.Begin();
 
 /* --- NOTES --- */
 /*
@@ -8,4 +10,3 @@ await StepOrganizer.Begin();
  *   - e.g. .dev TLDS
  *   - based on HSTS preload list
 */
-

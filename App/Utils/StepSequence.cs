@@ -3,7 +3,7 @@ using App.Utils;
 
 namespace App.Steps;
 
-public static class StepOrganizer
+public static class StepSequence
 {
     public static async Task Begin()
     {

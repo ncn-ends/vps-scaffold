@@ -1,6 +1,6 @@
 using System.Drawing;
 using Pastel;
-using static App.Utils.Executor;
+using static App.Utils.CLI;
 
 namespace App.Steps;
 
