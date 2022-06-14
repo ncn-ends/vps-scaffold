@@ -1,4 +1,5 @@
 using System.Drawing;
+using App.Static;
 using App.Utils;
 using Pastel;
 using static App.Utils.Executor;
@@ -7,9 +8,11 @@ namespace App.Steps;
 
 public static class SSHSteps
 {
-    private static async Task TellUserSetUpSSHFromClient(string username, string password)
+    private static void TellUserSetUpSshFromClient()
     {
-        var currentIp = await IpGrabber.GrabIpNoHttp();
+        var username = Data.Username;
+        var password = Data.Password;
+        var currentIp = Data.CurrentIp;
         Console.WriteLine(
             "\nAdd ssh keys remotely by using the ssh-copy-id command from your client machine. You will be prompted to use the temporary password."
                 .Pastel(Color.Gold));
@@ -19,7 +22,7 @@ public static class SSHSteps
         Speaker.SayPressAnyKey();
     }
 
-    private static void TellUserTrySSHLogin()
+    private static void TellUserTrySshLogin()
     {
         Console.WriteLine(
             "\nNow from your client machine, attempt to login to the remote server using your new user using SSH authentication."
@@ -53,12 +56,12 @@ public static class SSHSteps
     }
 
 
-    public static async Task PerformAll(string username, string password)
+    public static async Task PerformAll()
     {
         Console.WriteLine("Setting up SSH Authentication...".Pastel(Color.Teal));
 
-        await TellUserSetUpSSHFromClient(username, password);
-        TellUserTrySSHLogin();
+        TellUserSetUpSshFromClient();
+        TellUserTrySshLogin();
         await TurnOffPasswordAuthentication();
         await RestartSshService();
         TellUserTrySshLoginAgain();

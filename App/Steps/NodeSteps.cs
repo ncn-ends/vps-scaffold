@@ -1,4 +1,5 @@
 using System.Drawing;
+using App.Static;
 using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
@@ -42,8 +43,10 @@ namespace App.Steps;
 
 public static class NodeSteps
 {
-    public static async Task PerformAll(string password)
+    public static async Task PerformAll()
     {
+        var password = Data.Password;
+
         Console.WriteLine("Setting up NodeJS related things...".Pastel(Color.Teal));
 
         await Execute("cd ~");

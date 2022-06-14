@@ -1,4 +1,5 @@
 using System.Drawing;
+using App.Static;
 using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
@@ -22,20 +23,30 @@ namespace App.Steps;
 
 public static class NginxSteps
 {
-    public static async Task PerformAll(string password)
+    private static async Task InstallNginx()
     {
         Console.WriteLine("Installing Nginx...".Pastel(Color.Teal));
-        await Execute(new[] {"sudo", "apt", "update"}, silently: true);
+        await Sudo.AptUpdate();
         await Execute(new[] {"sudo", "apt", "install", "nginx", "-y"}, silently: true);
+    }
 
-        Console.WriteLine("Configuring firewall for HTTP requests...".Pastel(Color.Teal));
-        await Execute(new[] {"sudo", "ufw", "allow", @"Nginx HTTP"});
-
-        var currentIp = await IpGrabber.GrabIpNoHttp();
+    private static void ConfirmBasicSetup()
+    {
+        var currentIp = Data.CurrentIp;
+        
         Console.WriteLine("Verify that the server is accessible by navigating to it via your client machine's browser."
             .Pastel(Color.Gold));
         Console.WriteLine($"\tGo to: http://{currentIp}/".Pastel(Color.Gold));
         Console.WriteLine("You should be greeted by the default Nginx greeting page.");
         Speaker.SayPressAnyKey();
+    }
+
+    public static async Task PerformAll()
+    {
+        Console.WriteLine("Beginning Nginx configuration steps...".Pastel(Color.Teal));
+
+        await InstallNginx();
+        await FirewallSteps.PerformNginxSteps();
+        ConfirmBasicSetup();
     }
 }

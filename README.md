@@ -16,8 +16,15 @@
 
 ## Plans
 
+### Features
+
 - Disable root login
 - Configure "minimal" mode, which doesn't have as many prompts to guide the user.
 - Allow for SSL/TLS configuration
 - Allow for proper domain configuration
 - Allow for other types of deployments, such as ASP.NET, Python, etc.
+
+### Structure and Organization
+
+- Refactor all Pastel calls as custom extension methods corresponding to output type. 
+  - Maybe use enums here for organization
