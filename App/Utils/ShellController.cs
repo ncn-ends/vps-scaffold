@@ -15,7 +15,7 @@ public static class ShellController
         var pathToFile = $"/home/{username}";
         var fileName = "source-bashrc.sh";
 
-        await FileSystem.CreateScriptAndRun(content, pathToFile, fileName, cleanup: true, stdin: $"/home/{username}/.bashrc");
+        await FileSystem.CreateScriptAndRun(content, pathToFile, fileName, cleanup: true, args: $"/home/{username}/.bashrc");
     }
     
     public static async Task Execute(string cmd, bool silently = false)

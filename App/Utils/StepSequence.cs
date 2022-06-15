@@ -16,6 +16,6 @@ public static class StepSequence
         
         await SSHSteps.PerformAll();
         await NginxSteps.PerformAll();
-        await NodeSteps.PerformAll();
+        // await NodeSteps.PerformAll();
     }
 }

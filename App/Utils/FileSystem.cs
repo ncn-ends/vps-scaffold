@@ -154,7 +154,8 @@ public static class FileSystem
      * Examples of good use cases: `source ~/.bashrc` or using nvm commands
      */
     public static async Task CreateScriptAndRun(string content, string pathToFile, string fileName,
-        string? stdin = null, 
+        string? stdin = null,
+        string args = "",
         bool cleanup = false)
     {
         var fullPath = Path.Combine(pathToFile, fileName);
@@ -162,11 +163,11 @@ public static class FileSystem
         await GrantFilePermissions(fullPath);
         if (stdin is not null)
         {
-            await (stdin | Cli.Wrap(fullPath)).ExecuteBufferedAsync();
+            await (stdin | Cli.Wrap(fullPath).WithArguments(args)).ExecuteBufferedAsync();
         }
         else
         {
-            await Cli.Wrap(fullPath).ExecuteBufferedAsync();
+            await Cli.Wrap(fullPath).WithArguments(args).ExecuteBufferedAsync();
         }
 
         if (cleanup)
