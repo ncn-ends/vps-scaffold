@@ -1,11 +1,31 @@
 using System.Runtime.InteropServices;
+using App.Static;
 using CliWrap;
 using CliWrap.EventStream;
 
 namespace App.Utils;
 
-public static class CLI
+public static class ShellController
 {
+    public static async Task SourceBashrc()
+    {
+        var username = Data.Username;
+        
+        var content = StaticFileText.SourceBashrcScript();
+        var pathToFile = $"/home/{username}";
+        var fileName = "source-bashrc.sh";
+
+        await FileSystem.CreateScriptAndRun(content, pathToFile, fileName, cleanup: true, stdin: $"/home/{username}/.bashrc");
+    }
+    
+    public static async Task Execute(string cmd, bool silently = false)
+    {
+        if (cmd is null) throw new Exception("Bad argument. Commands can't be null.");
+
+        var parsedCmd = cmd.Split(" ");
+        await Execute(parsedCmd, silently);
+    }
+
     public static async Task Execute(string[] cmds, bool silently = false)
     {
         if (cmds is null) throw new Exception("Bad argument. Commands can't be null.");
@@ -14,16 +34,6 @@ public static class CLI
 
         await ProcessOutput(results, silently);
     }
-    
-    public static async Task Execute(string cmd, bool silently = false)
-    {
-        if (cmd is null) throw new Exception("Bad argument. Commands can't be null.");
-
-        var results = Cli.Wrap(cmd);
-
-        await ProcessOutput(results, silently);
-    }
-
 
     private static async Task ProcessOutput(Command results, bool silently)
     {

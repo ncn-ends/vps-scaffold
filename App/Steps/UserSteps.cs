@@ -2,7 +2,7 @@ using System.Drawing;
 using CliWrap;
 using CliWrap.Buffered;
 using Pastel;
-using static App.Utils.CLI;
+using static App.Utils.ShellController;
 
 namespace App.Steps;
 

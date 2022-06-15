@@ -2,7 +2,7 @@ using System.Drawing;
 using App.Static;
 using App.Utils;
 using Pastel;
-using static App.Utils.CLI;
+using static App.Utils.ShellController;
 
 namespace App.Steps;
 
@@ -60,6 +60,7 @@ public static class SSHSteps
     {
         Console.WriteLine("Setting up SSH Authentication...".Pastel(Color.Teal));
 
+        await Firewall.OpenSshPorts();
         TellUserSetUpSshFromClient();
         TellUserTrySshLogin();
         await TurnOffPasswordAuthentication();

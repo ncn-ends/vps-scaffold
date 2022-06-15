@@ -35,4 +35,23 @@ public static class StaticFileText
     </body>
 </html>";
     }
+
+    public static string SourceBashrcScript()
+    {
+        return @"#!/bin/bash
+
+source $1
+";
+    }
+    
+    public static string InstallNodeScript()
+    {
+        return @"#!/bin/bash
+
+. ~/.bashrc
+. ~/profile
+. ~/.nvm/nvm.sh
+nvm install --lts
+";
+    }
 }

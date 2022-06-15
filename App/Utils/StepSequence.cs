@@ -14,9 +14,8 @@ public static class StepSequence
         Data.Username = username;
         Data.Password = password;
         
-        await FirewallSteps.PerformSshSteps();
         await SSHSteps.PerformAll();
         await NginxSteps.PerformAll();
-        // await NodeSteps.PerformAll();
+        await NodeSteps.PerformAll();
     }
 }

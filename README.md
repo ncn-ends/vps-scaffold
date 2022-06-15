@@ -10,6 +10,7 @@
 
 ### Assumptions
 
+- The program assumes that it will be run on root initially.
 - SSL/TLS is not configured
 - The program does not assign a domain to the Nginx configuration and instead uses the public IPv4 address assigned to the server. 
   - Note: You can just assign a domain to the IP and get it working with http requests, but note that some domains require https when requesting from browsers. See HSTS domains list.

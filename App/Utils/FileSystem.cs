@@ -2,6 +2,8 @@ using System.Text;
 using System;
 using System.Drawing;
 using System.Runtime.Serialization.Formatters;
+using CliWrap;
+using CliWrap.Buffered;
 using Pastel;
 
 namespace App.Utils;
@@ -137,5 +139,39 @@ public static class FileSystem
         var fullPath = Path.Combine(pathToFile, fileName);
 
         await OverwriteFile(fullPath, content);
+    }
+
+    private static async Task GrantFilePermissions(string fullPath)
+    {
+        var cmd = Cli.Wrap("sudo").WithArguments(new[] {"chmod", "+x", fullPath});
+        await cmd.ExecuteBufferedAsync();
+    }
+
+    /*
+     * This method should be used sparingly, only as a workaround to commands
+     * that can't be executed normally through CliWrap due to shell conflicts.
+     *
+     * Examples of good use cases: `source ~/.bashrc` or using nvm commands
+     */
+    public static async Task CreateScriptAndRun(string content, string pathToFile, string fileName,
+        string? stdin = null, 
+        bool cleanup = false)
+    {
+        var fullPath = Path.Combine(pathToFile, fileName);
+        await WriteFile(content, pathToFile, fileName);
+        await GrantFilePermissions(fullPath);
+        if (stdin is not null)
+        {
+            await (stdin | Cli.Wrap(fullPath)).ExecuteBufferedAsync();
+        }
+        else
+        {
+            await Cli.Wrap(fullPath).ExecuteBufferedAsync();
+        }
+
+        if (cleanup)
+        {
+            File.Delete(fullPath);
+        }
     }
 }

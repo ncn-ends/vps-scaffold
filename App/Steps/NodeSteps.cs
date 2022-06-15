@@ -4,7 +4,7 @@ using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
 using Pastel;
-using static App.Utils.CLI;
+using static App.Utils.ShellController;
 
 namespace App.Steps;
 /* --- setting up nodejs --- */
@@ -43,19 +43,38 @@ namespace App.Steps;
 
 public static class NodeSteps
 {
+    public static async Task InstallNode()
+    {
+        var username = Data.Username;
+
+        var content = StaticFileText.InstallNodeScript();
+        var pathToFile = $"/home/{username}";
+        var fileName = "install-node.sh";
+
+        await FileSystem.CreateScriptAndRun(content, pathToFile, fileName, cleanup: true);
+    }
+
     public static async Task PerformAll()
     {
+        var username = Data.Username;
         var password = Data.Password;
 
         Console.WriteLine("Setting up NodeJS related things...".Pastel(Color.Teal));
 
-        await Execute("cd ~");
-        await Execute("wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash");
-        await Execute("source ~/.bashrc");
-        await Execute("nvm install --lts");
+        // await Execute("cd ~");
+        var cmd = Cli.Wrap("wget").WithArguments("-qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh")
+                  | Cli.Wrap("bash");
+        await cmd.ExecuteBufferedAsync();
+
+        await SourceBashrc();
+
+        await InstallNode();
 
         await APT.InstallPackage("build-essential");
-        await Execute("npm install pm2@latest -g");
+        // await Execute(new[] {"npm", "install", "pm2@latest", "-g"});
+        var cmd4 = Cli.Wrap("npm").WithArguments("install pm2@latest -g");
+        await cmd4.ExecuteBufferedAsync();
+
 
         Console.WriteLine("NodeJS set up complete.".Pastel(Color.Chartreuse));
     }

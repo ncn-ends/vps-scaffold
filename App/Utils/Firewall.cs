@@ -1,13 +1,13 @@
 using System.Drawing;
 using Pastel;
-using static App.Utils.CLI;
+using static App.Utils.ShellController;
 
-namespace App.Steps;
+namespace App.Utils;
 
-public static class FirewallSteps
+public static class Firewall
 {
     
-    public static async Task PerformNginxSteps()
+    public static async Task OpenNginxPorts()
     {
         Console.WriteLine("Configuring firewall for HTTP requests...".Pastel(Color.Teal));
         await Execute(new[] {"sudo", "ufw", "allow", @"Nginx HTTP"}, silently: true);
@@ -15,7 +15,7 @@ public static class FirewallSteps
         Console.WriteLine("Firewall configuration complete.".Pastel(Color.Chartreuse));
     }
     
-    public static async Task PerformSshSteps()
+    public static async Task OpenSshPorts()
     {
         Console.WriteLine("Configuring firewall for SSH...".Pastel(Color.Teal));
         await Execute(new[] {"ufw", "allow", "OpenSSH"}, silently: true);
