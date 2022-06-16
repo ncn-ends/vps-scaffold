@@ -4,6 +4,7 @@ using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
 
+Speaker.SayAsHeader("VPS Scaffolder", "Created by ncn-ends");
 await StepSequence.Begin();
 
 /* --- NOTES --- */
