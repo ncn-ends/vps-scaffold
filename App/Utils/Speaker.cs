@@ -5,9 +5,10 @@ namespace App.Utils;
 
 public static class Speaker
 {
+
     public static void SayPressAnyKey()
     {
-        Console.WriteLine("\t(Once you're finished, press any key to continue...)".Pastel(Color.Gold));
+        ColorPrinter.CallToAction("\t(Once you're finished, press any key to continue...)");
         Console.ReadKey();
     }
 }

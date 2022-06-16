@@ -1,10 +1,6 @@
 using System.Text;
-using System;
-using System.Drawing;
-using System.Runtime.Serialization.Formatters;
 using CliWrap;
 using CliWrap.Buffered;
-using Pastel;
 
 namespace App.Utils;
 
@@ -96,16 +92,13 @@ public static class FileSystem
     {
         if (fi.IsReadOnly)
         {
-            Console.WriteLine("File is read-only. Attempting to change permissions.");
-            Console.WriteLine($"\t{filePath}");
             File.SetAttributes(filePath, File.GetAttributes(filePath) & ~FileAttributes.ReadOnly);
         }
 
         if (fi.IsReadOnly)
         {
             throw new UnauthorizedAccessException(
-                "File is read-only despite attempt to change it. Are you running the program as sudo?".Pastel(
-                    Color.Crimson));
+                "File is read-only despite attempt to change it. Are you running the program as sudo?");
         }
     }
 

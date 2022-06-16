@@ -1,10 +1,7 @@
-using System.Drawing;
 using App.Static;
 using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
-using Pastel;
-using static App.Utils.ShellController;
 
 namespace App.Steps;
 
@@ -12,7 +9,7 @@ public static class NginxSteps
 {
     private static async Task InstallNginx()
     {
-        Console.WriteLine("Installing Nginx...".Pastel(Color.Teal));
+        ColorPrinter.Working("Installing Nginx...");
         await APT.InstallPackage("nginx");
     }
 
@@ -20,13 +17,10 @@ public static class NginxSteps
     {
         var currentIp = Data.CurrentIp;
 
-        Console.WriteLine("Verify that the server is accessible by navigating to it via your client machine's browser."
-            .Pastel(Color.Gold));
-        Console.WriteLine($"\tGo to: http://{currentIp}/".Pastel(Color.Gold));
-        // Printer.PrintAction
-        // Printer.PrintWorking
-        // Printer.PrintSuccess
-        Console.WriteLine("You should be greeted by the default Nginx greeting page.".Pastel(Color.Gold));
+        ColorPrinter.CallToAction(
+            "Verify that the server is accessible by navigating to it via your client machine's browser.");
+        ColorPrinter.CallToAction($"\tGo to: http://{currentIp}/");
+        ColorPrinter.CallToAction("You should be greeted by the default Nginx greeting page.");
         Speaker.SayPressAnyKey();
     }
 
@@ -99,13 +93,13 @@ public static class NginxSteps
 
     public static async Task PerformAll()
     {
-        Console.WriteLine("Beginning Nginx configuration steps...".Pastel(Color.Teal));
+        ColorPrinter.Working("Beginning Nginx configuration steps...");
 
         await InstallNginx();
         await Firewall.OpenNginxPorts();
         ConfirmBasicSetup();
 
-        Console.WriteLine("Configuring Nginx server block...".Pastel(Color.Teal));
+        ColorPrinter.Working("Configuring Nginx server block...");
 
         await SwitchToCreatedUser();
         await SetUpNginxDirectories();
@@ -118,6 +112,7 @@ public static class NginxSteps
 
         await VerifyNginx();
 
-        Console.WriteLine("Nginx set up complete.".Pastel(Color.Chartreuse));
+        ColorPrinter.WorkCompleted("Nginx set up complete.");
+        
     }
 }

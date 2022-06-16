@@ -1,7 +1,6 @@
-using System.Drawing;
+using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
-using Pastel;
 using static App.Utils.ShellController;
 
 namespace App.Steps;
@@ -10,12 +9,12 @@ public static class UserSteps
 {
     private static string AskForUsername()
     {
-        Console.Write("Write username: ".Pastel(Color.Gold));
+        ColorPrinter.CallToAction("Write username: ");
         var username = Console.ReadLine();
 
         if (username is null)
         {
-            Console.WriteLine("Invalid username. Try again.".Pastel(Color.Crimson));
+            ColorPrinter.Error("Invalid username. Try again.");
             return AskForUsername();
         }
 
@@ -24,27 +23,21 @@ public static class UserSteps
 
     private static string AskForPassword()
     {
-        Console.Write("Write password for user: ".Pastel(Color.Gold));
+        ColorPrinter.CallToAction("Write password for user: ");
         var password = Console.ReadLine();
-        
+
         if (password is null)
         {
-            Console.WriteLine("Invalid password. Try again.".Pastel(Color.Crimson));
+            ColorPrinter.Error("Invalid password. Try again.");
             return AskForPassword();
         }
 
         return password;
     }
 
-    // private static async Task CreateUser(string username)
-    // {
-    //     Console.WriteLine($"Creating user: \"{username}\"...".Pastel(Color.Teal));
-    //     await Execute(new[] {"useradd", username});
-    // }
-
     private static async Task CreateUserWithPassword(string username, string password)
     {
-        Console.WriteLine($"Creating user: \"{username}\"...".Pastel(Color.Teal));
+        ColorPrinter.Working($"Creating user: \"{username}\"...");
         var passwdCmd = $"{password}\n{password}\n\n\n\n\nY" | Cli.Wrap("adduser")
             .WithArguments(username);
         await passwdCmd.ExecuteBufferedAsync();
@@ -52,7 +45,7 @@ public static class UserSteps
 
     private static async Task AddUserToSudoRole(string username)
     {
-        Console.WriteLine("Assigning user roles...".Pastel(Color.Teal));
+        ColorPrinter.Working("Assigning user roles...");
         await Execute(new[] {"usermod", "-aG", "sudo", username}, silently: true);
     }
 
@@ -60,11 +53,11 @@ public static class UserSteps
     {
         var username = AskForUsername();
         var password = AskForPassword();
-        
+
         await CreateUserWithPassword(username, password);
         await AddUserToSudoRole(username);
 
-        Console.WriteLine("User created".Pastel(Color.Chartreuse));
+        ColorPrinter.WorkCompleted("User created.");
 
         return (username, password);
     }

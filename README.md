@@ -1,6 +1,11 @@
 ## Introduction
 
-
+This project is meant to scaffold an Ubuntu installation with the necessary steps for deployment of a web service. This includes:
+- Setting up a user with sudo privileges
+- Basic security configurations
+- Configuring SSH
+- Configuring firewalls
+- Setting up Nginx, including Nginx server blocks
 
 ## Usage
 
@@ -11,7 +16,6 @@
 ### Assumptions
 
 - The program assumes that it will be run on root initially.
-- SSL/TLS is not configured
 - The program does not assign a domain to the Nginx configuration and instead uses the public IPv4 address assigned to the server. 
   - Note: You can just assign a domain to the IP and get it working with http requests, but note that some domains require https when requesting from browsers. See HSTS domains list.
 
@@ -23,7 +27,6 @@
 - Configure "minimal" mode, which doesn't have as many prompts to guide the user.
 - Allow for SSL/TLS configuration
 - Allow for proper domain configuration
-- Allow for other types of deployments, such as ASP.NET, Python, etc.
 
 ### Structure and Organization
 
