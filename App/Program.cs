@@ -1,9 +1,11 @@
-﻿using App.Terminal;
+﻿using App.State;
+using App.Terminal;
 using App.Utils;
 
 Speaker.SayAsHeader("VPS Scaffolder", "Created by ncn-ends");
 
-await StepSequence.Begin();
+var flagStore = new FlagStore(args);
+await StepSequence.Begin(flagStore);
 
 Speaker.SayAsHeader("VPS Setup Complete", "Thanks for using VPS Scaffolder!");
 

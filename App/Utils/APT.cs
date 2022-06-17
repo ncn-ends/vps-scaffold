@@ -1,4 +1,5 @@
-using App.Static;
+using App.State;
+using App.Templates;
 using CliWrap;
 using CliWrap.Buffered;
 
@@ -8,7 +9,7 @@ public static class APT
 {
     private static async Task UpdatePackages()
     {
-        var password = AppStore.Password;
+        var password = Store.Password;
 
         var sudoAptUpdate = password | Cli.Wrap("sudo").WithArguments("apt update");
         await sudoAptUpdate.ExecuteBufferedAsync();
@@ -16,7 +17,7 @@ public static class APT
 
     public static async Task InstallPackage(string package)
     {
-        var password = AppStore.Password;
+        var password = Store.Password;
 
         await UpdatePackages();
 

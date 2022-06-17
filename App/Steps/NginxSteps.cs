@@ -1,5 +1,6 @@
+using App.State;
 using App.Terminal;
-using App.Static;
+using App.Templates;
 using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
@@ -16,7 +17,7 @@ public static class NginxSteps
 
     private static void ConfirmBasicSetup()
     {
-        var currentIp = AppStore.CurrentIp;
+        var currentIp = Store.CurrentIp;
 
         ColorPrinter.CallToAction(
             "Verify that the server is accessible by navigating to it via your client machine's browser.");
@@ -27,15 +28,15 @@ public static class NginxSteps
 
     private static async Task SwitchToCreatedUser()
     {
-        var username = AppStore.Username;
+        var username = Store.Username;
         await Cli.Wrap("su").WithArguments(username).ExecuteBufferedAsync();
     }
 
     private static async Task SetUpNginxDirectories()
     {
-        var domainName = AppStore.CurrentIp;
-        var password = AppStore.Password;
-        var username = AppStore.Username;
+        var domainName = Store.CurrentIp;
+        var password = Store.Password;
+        var username = Store.Username;
 
         await (password | Cli.Wrap("sudo").WithArguments(new[]
             {
@@ -65,13 +66,13 @@ public static class NginxSteps
             .ExecuteBufferedAsync();
 
         await FileSystem.WriteFile(
-            StaticFileText.DefaultHtmlFile(),
+            FileTemplates.DefaultHtmlFile(),
             $"/var/www/{domainName}/html",
             "index.html"
         );
 
         await FileSystem.WriteFile(
-            StaticFileText.NginxServerBlock(domainName),
+            FileTemplates.NginxServerBlock(domainName),
             "/etc/nginx/sites-available",
             domainName
         );
@@ -83,7 +84,7 @@ public static class NginxSteps
 
     private static async Task VerifyNginx()
     {
-        var password = AppStore.Password;
+        var password = Store.Password;
 
         await (password | Cli.Wrap("sudo").WithArguments(new[] {"nginx", "-t"}))
             .ExecuteBufferedAsync();

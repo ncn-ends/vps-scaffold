@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
-using App.Static;
+using App.State;
+using App.Templates;
 using CliWrap;
 using CliWrap.EventStream;
 
@@ -9,9 +10,9 @@ public static class ShellController
 {
     public static async Task SourceBashrc()
     {
-        var username = AppStore.Username;
+        var username = Store.Username;
         
-        var content = StaticFileText.SourceBashrcScript();
+        var content = FileTemplates.SourceBashrcScript();
         var pathToFile = $"/home/{username}";
         var fileName = "source-bashrc.sh";
 

@@ -1,6 +1,6 @@
-namespace App.Static;
+namespace App.Templates;
 
-public static class StaticFileText
+public static class FileTemplates
 {
     public static string NginxServerBlock(string domainName, string portNumber = "3000")
     {
@@ -36,6 +36,7 @@ public static class StaticFileText
 </html>";
     }
 
+    /* TODO: path in the path to the method argument rather than in the bash argument */
     public static string SourceBashrcScript()
     {
         return @"#!/bin/bash

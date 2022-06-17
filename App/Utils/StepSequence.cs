@@ -1,21 +1,22 @@
+using App.State;
 using App.Terminal;
-using App.Static;
+using App.Templates;
 using App.Steps;
 
 namespace App.Utils;
 
 public static class StepSequence
 {
-    public static async Task Begin()
+    public static async Task Begin(FlagStore flagStore)
     {
         try
         {
-            AppStore.CurrentIp = await IpGrabber.GrabIpNoHttp();
+            Store.CurrentIp = await IpGrabber.GrabIpNoHttp();
 
             var (username, password) = await UserSteps.PerformAll();
 
-            AppStore.Username = username;
-            AppStore.Password = password;
+            Store.Username = username;
+            Store.Password = password;
 
             await SSHSteps.PerformAll();
             await NginxSteps.PerformAll();

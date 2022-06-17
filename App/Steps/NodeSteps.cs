@@ -1,5 +1,6 @@
 using System.Drawing;
-using App.Static;
+using App.State;
+using App.Templates;
 using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;
@@ -45,9 +46,9 @@ public static class NodeSteps
 {
     public static async Task InstallNode()
     {
-        var username = AppStore.Username;
+        var username = Store.Username;
 
-        var content = StaticFileText.InstallNodeScript();
+        var content = FileTemplates.InstallNodeScript();
         var pathToFile = $"/home/{username}";
         var fileName = "install-node.sh";
 
@@ -56,8 +57,8 @@ public static class NodeSteps
 
     public static async Task PerformAll()
     {
-        var username = AppStore.Username;
-        var password = AppStore.Password;
+        var username = Store.Username;
+        var password = Store.Password;
 
         Console.WriteLine("Setting up NodeJS related things...".Pastel(Color.Teal));
 
