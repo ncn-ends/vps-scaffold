@@ -9,9 +9,26 @@ This project is meant to scaffold an Ubuntu installation with the necessary step
 
 ## Usage
 
-1) Download the release package.
-2) Run the command
+1) Download the release package and place it to the remote server.
+2) Run the command (with optional flags)
+```
+./vps-scaffold [--minimal]
+               [--no-http / no-https]
+               [--no-domain]
+```
 3) Follow the prompts and input them accordingly.
+
+### Optional Parameters
+#### `--minimal`
+- User input prompts will be avoided unless crucial during set up process.
+
+#### `--nohttp` / `no-https`
+- Redirects http requests to the described protocol at the nginx level.
+- By default, both http and https requests will be accepted. 
+
+#### `--no-domain`
+- Will not ask the user for a domain name prompt.
+- Nginx will be configued with the server's IP as the domain name for the server block.
 
 ### Assumptions
 
