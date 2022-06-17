@@ -45,7 +45,7 @@ public static class NodeSteps
 {
     public static async Task InstallNode()
     {
-        var username = Data.Username;
+        var username = AppStore.Username;
 
         var content = StaticFileText.InstallNodeScript();
         var pathToFile = $"/home/{username}";
@@ -56,8 +56,8 @@ public static class NodeSteps
 
     public static async Task PerformAll()
     {
-        var username = Data.Username;
-        var password = Data.Password;
+        var username = AppStore.Username;
+        var password = AppStore.Password;
 
         Console.WriteLine("Setting up NodeJS related things...".Pastel(Color.Teal));
 

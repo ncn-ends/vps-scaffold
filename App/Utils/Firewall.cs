@@ -1,3 +1,4 @@
+using App.Terminal;
 using static App.Utils.ShellController;
 
 namespace App.Utils;

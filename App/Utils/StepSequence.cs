@@ -1,3 +1,4 @@
+using App.Terminal;
 using App.Static;
 using App.Steps;
 
@@ -9,12 +10,12 @@ public static class StepSequence
     {
         try
         {
-            Data.CurrentIp = await IpGrabber.GrabIpNoHttp();
+            AppStore.CurrentIp = await IpGrabber.GrabIpNoHttp();
 
             var (username, password) = await UserSteps.PerformAll();
 
-            Data.Username = username;
-            Data.Password = password;
+            AppStore.Username = username;
+            AppStore.Password = password;
 
             await SSHSteps.PerformAll();
             await NginxSteps.PerformAll();

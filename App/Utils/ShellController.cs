@@ -9,7 +9,7 @@ public static class ShellController
 {
     public static async Task SourceBashrc()
     {
-        var username = Data.Username;
+        var username = AppStore.Username;
         
         var content = StaticFileText.SourceBashrcScript();
         var pathToFile = $"/home/{username}";

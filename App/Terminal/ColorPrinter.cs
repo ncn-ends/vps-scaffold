@@ -1,7 +1,7 @@
 using System.Drawing;
 using Pastel;
 
-namespace App.Utils;
+namespace App.Terminal;
 
 public static class ColorPrinter
 {

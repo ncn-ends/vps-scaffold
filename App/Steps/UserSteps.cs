@@ -1,3 +1,4 @@
+using App.Terminal;
 using App.Utils;
 using CliWrap;
 using CliWrap.Buffered;

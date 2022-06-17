@@ -1,15 +1,13 @@
-﻿using App.Static;
-using App.Steps;
+﻿using App.Terminal;
 using App.Utils;
-using CliWrap;
-using CliWrap.Buffered;
 
 Speaker.SayAsHeader("VPS Scaffolder", "Created by ncn-ends");
+
 await StepSequence.Begin();
 
-/* --- NOTES --- */
-/*
- * some domains are not going to work with http
- *   - e.g. .dev TLDS
- *   - based on HSTS preload list
-*/
+Speaker.SayAsHeader("VPS Setup Complete", "Thanks for using VPS Scaffolder!");
+
+// var asd = args.Contains("--minimal");
+// var asd = args.Contains("--http-only");
+// var asd = args.Contains("--https-only");
+// Console.WriteLine(asd);
