@@ -29,5 +29,7 @@ public class FlagStore
 
         var hasNoDomainFlag = args.Contains("--no-domain");
         if (hasNoDomainFlag) AsNoDomain = true;
+
+        AppStore.FlagStore = this;
     }
 }

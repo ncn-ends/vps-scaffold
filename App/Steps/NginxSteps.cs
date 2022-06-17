@@ -1,3 +1,4 @@
+using System.Drawing;
 using App.State;
 using App.Terminal;
 using App.Templates;
@@ -34,7 +35,10 @@ public static class NginxSteps
 
     private static async Task SetUpNginxDirectories()
     {
-        var domainName = AppStore.CurrentIp;
+        var domainName = AppStore.DomainName != ""
+            ? AppStore.DomainName
+            : AppStore.CurrentIp;
+        
         var password = AppStore.Password;
         var username = AppStore.Username;
 
@@ -93,6 +97,16 @@ public static class NginxSteps
             .ExecuteBufferedAsync();
     }
 
+    private static void PromptForDomainName()
+    {
+        ColorPrinter.CallToAction("If you haven't done so yet, setup the domain to point to this IP.");
+        Speaker.SayPressAnyKey();
+        ColorPrinter.CallToAction("What will be the domain name for the website? ");
+        var domainName = Console.ReadLine();
+        ColorPrinter.Working($"Setting domain name to: {domainName}");
+        if (domainName != null) AppStore.DomainName = domainName;
+    }
+
     public static async Task PerformAll()
     {
         ColorPrinter.Working("Beginning Nginx configuration steps...");
@@ -102,6 +116,11 @@ public static class NginxSteps
         ConfirmBasicSetup();
 
         ColorPrinter.Working("Configuring Nginx server block...");
+
+        if (!AppStore.FlagStore.AsNoDomain)
+        {
+            PromptForDomainName();
+        }
 
         await SwitchToCreatedUser();
         await SetUpNginxDirectories();
@@ -115,6 +134,5 @@ public static class NginxSteps
         await VerifyNginx();
 
         ColorPrinter.WorkCompleted("Nginx set up complete.");
-        
     }
 }
