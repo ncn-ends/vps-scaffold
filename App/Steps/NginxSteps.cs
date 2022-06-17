@@ -17,7 +17,7 @@ public static class NginxSteps
 
     private static void ConfirmBasicSetup()
     {
-        var currentIp = Store.CurrentIp;
+        var currentIp = AppStore.CurrentIp;
 
         ColorPrinter.CallToAction(
             "Verify that the server is accessible by navigating to it via your client machine's browser.");
@@ -28,15 +28,15 @@ public static class NginxSteps
 
     private static async Task SwitchToCreatedUser()
     {
-        var username = Store.Username;
+        var username = AppStore.Username;
         await Cli.Wrap("su").WithArguments(username).ExecuteBufferedAsync();
     }
 
     private static async Task SetUpNginxDirectories()
     {
-        var domainName = Store.CurrentIp;
-        var password = Store.Password;
-        var username = Store.Username;
+        var domainName = AppStore.CurrentIp;
+        var password = AppStore.Password;
+        var username = AppStore.Username;
 
         await (password | Cli.Wrap("sudo").WithArguments(new[]
             {
@@ -84,7 +84,7 @@ public static class NginxSteps
 
     private static async Task VerifyNginx()
     {
-        var password = Store.Password;
+        var password = AppStore.Password;
 
         await (password | Cli.Wrap("sudo").WithArguments(new[] {"nginx", "-t"}))
             .ExecuteBufferedAsync();

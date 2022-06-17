@@ -1,6 +1,6 @@
 namespace App.State;
 
-public static class Store
+public static class AppStore
 {
     public static string Username { get; set; } = "";
     public static string Password { get; set; } = "";

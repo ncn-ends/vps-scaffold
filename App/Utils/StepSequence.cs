@@ -11,12 +11,12 @@ public static class StepSequence
     {
         try
         {
-            Store.CurrentIp = await IpGrabber.GrabIpNoHttp();
+            AppStore.CurrentIp = await IpGrabber.GrabIpNoHttp();
 
             var (username, password) = await UserSteps.PerformAll();
 
-            Store.Username = username;
-            Store.Password = password;
+            AppStore.Username = username;
+            AppStore.Password = password;
 
             await SSHSteps.PerformAll();
             await NginxSteps.PerformAll();

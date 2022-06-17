@@ -10,9 +10,9 @@ public static class SSHSteps
 {
     private static void TellUserSetUpSshFromClient()
     {
-        var username = Store.Username;
-        var password = Store.Password;
-        var currentIp = Store.CurrentIp;
+        var username = AppStore.Username;
+        var password = AppStore.Password;
+        var currentIp = AppStore.CurrentIp;
         ColorPrinter.CallToAction(
             "\nAdd ssh keys remotely by using the ssh-copy-id command from your client machine. You will be prompted to use the temporary password.");
         ColorPrinter.ImportantInfo($"\tCommand: ssh-copy-id {username}@{currentIp}");
