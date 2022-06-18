@@ -22,7 +22,7 @@ This project is meant to scaffold an Ubuntu installation with the necessary step
 #### `--minimal`
 - User input prompts will be avoided unless crucial during set up process.
 
-#### `--nohttp` / `no-https`
+#### `--no-http` / `no-https`
 - Redirects http requests to the described protocol at the nginx level.
 - By default, both http and https requests will be accepted. 
 
@@ -41,11 +41,4 @@ This project is meant to scaffold an Ubuntu installation with the necessary step
 ### Features
 
 - Disable root login
-- Configure "minimal" mode, which doesn't have as many prompts to guide the user.
-- Allow for SSL/TLS configuration
-- Allow for proper domain configuration
-
-### Structure and Organization
-
-- Refactor all Pastel calls as custom extension methods corresponding to output type. 
-  - Maybe use enums here for organization
+- Allow for multiple domain per server block configuration.
