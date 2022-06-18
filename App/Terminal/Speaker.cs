@@ -5,12 +5,6 @@ namespace App.Terminal;
 
 public static class Speaker
 {
-    public static void SayPressAnyKey()
-    {
-        ColorPrinter.CallToAction("\t(Once you're finished, press any key to continue...)");
-        Console.ReadKey();
-    }
-
     /* https://en.wikipedia.org/wiki/Box-drawing_character */
     public static void SayAsHeader(string msg, string subheader = "")
     {

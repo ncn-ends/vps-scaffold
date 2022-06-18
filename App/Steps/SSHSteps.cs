@@ -15,14 +15,14 @@ public static class SSHSteps
         ColorPrinter.CallToAction(
             "\nAdd ssh keys remotely by using the ssh-copy-id command from your client machine. Use the password you just made.");
         ColorPrinter.ImportantInfo($"\tCommand: ssh-copy-id {username}@{currentIp}");
-        Speaker.SayPressAnyKey();
+        Prompter.PromptUserForAnyKey();
     }
 
     private static void TellUserTrySshLogin()
     {
         ColorPrinter.CallToAction(
             "\nNow from your client machine, attempt to login to the remote server using your new user using SSH authentication.");
-        Speaker.SayPressAnyKey();
+        Prompter.PromptUserForAnyKey();
     }
 
     private static async Task TurnOffPasswordAuthentication()
@@ -47,7 +47,7 @@ public static class SSHSteps
     {
         ColorPrinter.CallToAction("\nSSH authentication completed and password authentication is disabled.");
         ColorPrinter.CallToAction("Try to log in again with ssh to confirm it's working.");
-        Speaker.SayPressAnyKey();
+        Prompter.PromptUserForAnyKey();
     }
 
     public static async Task PerformAll()

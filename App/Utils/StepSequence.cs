@@ -7,7 +7,7 @@ namespace App.Utils;
 
 public static class StepSequence
 {
-    public static async Task Begin(FlagStore flagStore)
+    public static async Task Begin()
     {
         try
         {

@@ -24,7 +24,7 @@ public static class NginxSteps
             "Verify that the server is accessible by navigating to it via your client machine's browser.");
         ColorPrinter.CallToAction($"\tGo to: http://{currentIp}/");
         ColorPrinter.CallToAction("You should be greeted by the default Nginx greeting page.");
-        Speaker.SayPressAnyKey();
+        Prompter.PromptUserForAnyKey();
     }
 
     private static async Task SwitchToCreatedUser()
@@ -98,13 +98,12 @@ public static class NginxSteps
     private static void TellUserToSetUpDns()
     {
         ColorPrinter.CallToAction("If you haven't done so yet, setup the domain to point to this IP.");
-        Speaker.SayPressAnyKey();
+        Prompter.PromptUserForAnyKey();
     }
     
     private static void PromptForDomainName()
     {
-        ColorPrinter.CallToAction("What will be the domain name for the website? ");
-        var domainName = Console.ReadLine();
+        var domainName = Prompter.PromptUser("Enter domain name: ");
         ColorPrinter.Working($"Setting domain name to: {domainName}");
         if (domainName != null) AppStore.DomainName = domainName;
     }
