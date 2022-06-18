@@ -25,9 +25,7 @@ public static class SSLSteps
                 "certbot",
                 "--nginx",
                 "-d",
-                AppStore.DomainName,
-                "-d",
-                $"www.{AppStore.DomainName}"
+                AppStore.DomainName
             }))
             .ExecuteBufferedAsync();
         // TODO: allow for multiple entered domains
