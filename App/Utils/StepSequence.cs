@@ -11,7 +11,9 @@ public static class StepSequence
     {
         try
         {
-            AppStore.CurrentIp = await IpGrabber.GrabIpNoHttp();
+            var ip = await IpGrabber.GrabIpNoHttp();
+            AppStore.CurrentIp = ip;
+            AppStore.DomainName = ip;
 
             var (username, password) = await UserSteps.PerformAll();
 
@@ -19,8 +21,11 @@ public static class StepSequence
             AppStore.Password = password;
 
             await SSHSteps.PerformAll();
+
             await NginxSteps.PerformAll();
             // await NodeSteps.PerformAll();
+
+            // if (AppStore.FlagStore.AsHttps) await SSLSteps.PerformAll();
         }
         catch (Exception e)
         {

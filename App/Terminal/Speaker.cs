@@ -23,4 +23,20 @@ public static class Speaker
         Console.WriteLine(bottomline.Pastel(Color.DeepSkyBlue));
         Console.WriteLine(subheader.Pastel(Color.DeepSkyBlue));
     }
+
+    public static string? PromptUserAsHidden(string prompt)
+    {
+        ColorPrinter.CallToAction(prompt);
+        string? password = null;
+        
+        while (true)
+        {
+            var key = Console.ReadKey(true);
+            if (key.Key == ConsoleKey.Enter)
+                break;
+            password += key.KeyChar;
+        }
+
+        return password;
+    }
 }

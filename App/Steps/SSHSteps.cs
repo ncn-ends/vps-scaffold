@@ -11,12 +11,10 @@ public static class SSHSteps
     private static void TellUserSetUpSshFromClient()
     {
         var username = AppStore.Username;
-        var password = AppStore.Password;
         var currentIp = AppStore.CurrentIp;
         ColorPrinter.CallToAction(
-            "\nAdd ssh keys remotely by using the ssh-copy-id command from your client machine. You will be prompted to use the temporary password.");
+            "\nAdd ssh keys remotely by using the ssh-copy-id command from your client machine. Use the password you just made.");
         ColorPrinter.ImportantInfo($"\tCommand: ssh-copy-id {username}@{currentIp}");
-        ColorPrinter.ImportantInfo($"\tPassword: {password}");
         Speaker.SayPressAnyKey();
     }
 
@@ -52,17 +50,20 @@ public static class SSHSteps
         Speaker.SayPressAnyKey();
     }
 
-
     public static async Task PerformAll()
     {
         ColorPrinter.Working("Setting up SSH Authentication...");
 
         await Firewall.OpenSshPorts();
+
         TellUserSetUpSshFromClient();
-        TellUserTrySshLogin();
+
+        if (!AppStore.FlagStore.AsMinimal) TellUserTrySshLogin();
+
         await TurnOffPasswordAuthentication();
         await RestartSshService();
-        TellUserTrySshLoginAgain();
+        
+        if (!AppStore.FlagStore.AsMinimal) TellUserTrySshLoginAgain();
 
         ColorPrinter.Working("SSH set up complete");
     }

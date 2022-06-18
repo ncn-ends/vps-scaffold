@@ -24,8 +24,8 @@ public static class UserSteps
 
     private static string AskForPassword()
     {
-        ColorPrinter.CallToAction("Write password for user: ");
-        var password = Console.ReadLine();
+        // ColorPrinter.CallToAction("Write password for user: ");
+        var password = Speaker.PromptUserAsHidden("Write password for user: ");
 
         if (password is null)
         {
