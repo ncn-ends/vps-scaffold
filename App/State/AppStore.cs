@@ -9,4 +9,6 @@ public static class AppStore
     public static string DomainName { get; set; } = "";
 
     public static FlagStore FlagStore { get; set; } = new(new string[] { });
+
+    public static string Email { get; set; } = "";
 }

@@ -24,11 +24,15 @@ public class FlagStore
         if (hasHttpOnly) AsHttp = true;
         if (hasHttpsOnly) AsHttps = true;
 
+
         var hasMinimalFlag = args.Contains("--minimal");
         if (hasMinimalFlag) AsMinimal = true;
 
         var hasNoDomainFlag = args.Contains("--no-domain");
         if (hasNoDomainFlag) AsNoDomain = true;
+
+
+        if (hasHttpsOnly && hasNoDomainFlag) throw new ArgumentException("HTTPS requires a proper domain name.");
 
         AppStore.FlagStore = this;
     }

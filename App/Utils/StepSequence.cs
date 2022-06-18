@@ -25,7 +25,7 @@ public static class StepSequence
             await NginxSteps.PerformAll();
             // await NodeSteps.PerformAll();
 
-            // if (AppStore.FlagStore.AsHttps) await SSLSteps.PerformAll();
+            if (AppStore.FlagStore.AsHttps) await SSLSteps.PerformAll();
         }
         catch (Exception e)
         {
