@@ -12,6 +12,7 @@ public static class Speaker
         var topline = '╔' + horizontalline + '╗';
         var bottomline = '╚' + horizontalline + '╝';
         var middleline = $"║  {msg}  ║";
+        Console.WriteLine("\n\n\n");
         Console.WriteLine(topline.Pastel(Color.DeepSkyBlue));
         Console.WriteLine(middleline.Pastel(Color.DeepSkyBlue));
         Console.WriteLine(bottomline.Pastel(Color.DeepSkyBlue));

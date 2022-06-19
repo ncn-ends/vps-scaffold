@@ -11,12 +11,13 @@ public static class SSLSteps
     public static async Task PerformAll()
     {
         ColorPrinter.Working("Setting up SSL certificate...");
-        await APT.InstallPackage("certbot");
-        await APT.InstallPackage("python3-certbot-nginx");
+        
         var email = Prompter.PromptUser("Enter your email to be used to register for the SSL certificate:");
         if (email is null) throw new ArgumentException("E-Mail cannot be null.");
         AppStore.Email = email;
-
+        
+        await APT.InstallPackage("certbot");
+        await APT.InstallPackage("python3-certbot-nginx");
         var autoHttpsRedirectAnswer = AppStore.FlagStore.AsHttp
             ? "1"
             : "2";
