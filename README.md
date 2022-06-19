@@ -9,8 +9,6 @@ This project is meant to scaffold an Ubuntu machine with the standard requiremen
 - Configuring firewalls
 - Setting up Nginx, including Nginx server blocks
 
-
-
 ## Usage
 
 1) Provision an Ubuntu VPS
@@ -41,3 +39,12 @@ This project is meant to scaffold an Ubuntu machine with the standard requiremen
 ### Features
 
 - Allow for multiple domain per server block configuration.
+
+## Authors
+
+- [@ncn-ends](https://www.github.com/ncn-ends)
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
