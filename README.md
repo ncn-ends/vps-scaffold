@@ -1,16 +1,22 @@
 ## Introduction
 
-This project is meant to scaffold an Ubuntu installation with the necessary steps for deployment of a web service. This includes:
+This project is meant to scaffold an Ubuntu machine with the standard requirements to deploy a web service. This includes:
+- Installing necessary packages
 - Setting up a user with sudo privileges
 - Basic security configurations
 - Configuring SSH
+- Configuring SSL
 - Configuring firewalls
 - Setting up Nginx, including Nginx server blocks
 
+
+
 ## Usage
 
-1) Download the release package and place it to the remote server.
-2) Run the command (with optional flags)
+1) Provision an Ubuntu VPS
+2) Download the release package and place it to the remote server.
+  - You can do this in a variety of ways, such as wget the release package, build the binary and sftp it, etc.
+3) Making sure you're on root, run the command (with optional flags)
 ```
 ./vps-scaffold [--minimal]
                [--no-http / no-https]
@@ -27,18 +33,11 @@ This project is meant to scaffold an Ubuntu installation with the necessary step
 - By default, both http and https requests will be accepted. 
 
 #### `--no-domain`
-- Will not ask the user for a domain name prompt.
-- Nginx will be configued with the server's IP as the domain name for the server block.
+- Will not ask the user for a domain name prompt and Nginx will be configued with the server's IP as the domain name for the server block.
 
-### Assumptions
-
-- The program assumes that it will be run on root initially.
-- The program does not assign a domain to the Nginx configuration and instead uses the public IPv4 address assigned to the server. 
-  - Note: You can just assign a domain to the IP and get it working with http requests, but note that some domains require https when requesting from browsers. See HSTS domains list.
 
 ## Plans
 
 ### Features
 
-- Disable root login
 - Allow for multiple domain per server block configuration.
